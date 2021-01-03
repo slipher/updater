@@ -7,6 +7,7 @@ CONFIG += c++11
 HEADERS += ariadownloader.h \
     downloadtimecalculator.h \
     downloadworker.h \
+    main.h \
     system.h \
     settings.h \
     qmldownloader.h \

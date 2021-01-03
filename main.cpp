@@ -1,3 +1,5 @@
+#include "main.h"
+
 #include <QApplication>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
@@ -38,6 +40,20 @@ void LogSettings() {
 
 } // namespace
 
+const CommandLineOptions& getCommandLineOptions() {
+    static const CommandLineOptions options = [] {
+        QCommandLineOption logFileNameOption("logfile");
+        logFileNameOption.setValueName("filename");
+        QCommandLineParser optionParser;
+        optionParser.addOption(logFileNameOption);
+        optionParser.process(*QApplication::instance());
+        CommandLineOptions options;
+        options.logFilename = optionParser.value(logFileNameOption);
+        return options;
+    }();
+    return options;
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Unvanquished Updater");
@@ -46,12 +62,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
-    QCommandLineOption logFileNameOption("logfile");
-    logFileNameOption.setValueName("filename");
-    QCommandLineParser optionParser;
-    optionParser.addOption(logFileNameOption);
-    optionParser.process(app);
-    QString logFilename = optionParser.value(logFileNameOption);
+    QString logFilename = getCommandLineOptions().logFilename;
     if (!logFilename.isEmpty()) {
         logFile.setFileName(logFilename);
         if (logFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
