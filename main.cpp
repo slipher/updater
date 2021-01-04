@@ -44,11 +44,15 @@ const CommandLineOptions& getCommandLineOptions() {
     static const CommandLineOptions options = [] {
         QCommandLineOption logFileNameOption("logfile");
         logFileNameOption.setValueName("filename");
+        QCommandLineOption ariaLogFileNameOption("arialogfile");
+        ariaLogFileNameOption.setValueName("filename");
         QCommandLineParser optionParser;
         optionParser.addOption(logFileNameOption);
+        optionParser.addOption(ariaLogFileNameOption);
         optionParser.process(*QApplication::instance());
         CommandLineOptions options;
         options.logFilename = optionParser.value(logFileNameOption);
+        options.ariaLogFilename = optionParser.value(ariaLogFileNameOption);
         return options;
     }();
     return options;

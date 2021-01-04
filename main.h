@@ -5,6 +5,7 @@
 
 struct CommandLineOptions {
     QString logFilename;
+    QString ariaLogFilename; // This one opens append instead of write
 };
 
 const CommandLineOptions& getCommandLineOptions();

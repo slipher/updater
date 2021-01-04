@@ -1,6 +1,7 @@
 #include <QDebug>
 
 #include "ariadownloader.h"
+#include "main.h"
 #include "system.h"
 
 int downloadEventCallback(aria2::Session* session, aria2::DownloadEvent event,
@@ -27,6 +28,11 @@ AriaDownloader::AriaDownloader() : callback_(nullptr)
     options.push_back({ "file-allocation", "none" });
     options.push_back({ "follow-torrent", "mem" });
     options.push_back({ "quiet", "false" });
+
+    QString logFilename = getCommandLineOptions().ariaLogFilename;
+    if (!logFilename.isEmpty()) {
+        options.push_back({ "log", logFilename.toStdString() });
+    }
 
     std::string certsPath = Sys::getCertStore();
     if (!certsPath.empty()) {
