@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y \
     make \
     pkg-config \
     python \
-    xz-utils
+    xz-utils \
+    zip
 
 # Something in Qt does not build with win32 thread flavor
 RUN update-alternatives --set i686-w64-mingw32-gcc /usr/bin/i686-w64-mingw32-gcc-posix && \
@@ -62,3 +63,5 @@ COPY . /updater2
 RUN set -e; for D in . quazip fluid; do cd /updater2/$D && git clean -dXff; done
 WORKDIR /build
 RUN /qt/bin/qmake -config release QMAKE_LFLAGS+="-static" INCLUDEPATH+=/qt/include/QtZlib /updater2 && make -j`nproc`
+WORKDIR /release-win
+RUN cp /build/release/updater2.exe UnvanquishedUpdater.exe && zip UnvUpdaterWin.zip UnvanquishedUpdater.exe
